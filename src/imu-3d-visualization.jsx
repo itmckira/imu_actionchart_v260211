@@ -19,7 +19,7 @@ const IMU3DVisualization = () => {
   const positionRef = useRef(new THREE.Vector3(0, 0, 0));
   const velocityRef = useRef(new THREE.Vector3(0, 0, 0));
 
-  // 3D对象引用
+  // 3D物件引用
   const objectsRef = useRef({
     accArrow: null,
     gyroArrow: null,
@@ -29,12 +29,12 @@ const IMU3DVisualization = () => {
     axesHelper: null
   });
 
-  // 判断运动状态
+  // 判斷運動狀態
   const determineMotionState = (data) => {
     const accMagnitude = Math.sqrt(data.accX ** 2 + data.accY ** 2 + data.accZ ** 2);
     const gyroMagnitude = Math.sqrt(data.gyroX ** 2 + data.gyroY ** 2 + data.gyroZ ** 2);
 
-    // 去除重力影响（假设Z轴向上）
+    // 去除重力影響（假設Z軸向上）
     const dynamicAcc = Math.sqrt(data.accX ** 2 + data.accY ** 2 + (data.accZ - 9.8) ** 2);
 
     if (dynamicAcc < 0.5 && gyroMagnitude < 20) {
@@ -50,7 +50,7 @@ const IMU3DVisualization = () => {
     }
   };
 
-  // 生成IMU数据
+  // 生成IMU數據
   const generateIMUData = () => {
     const time = timeRef.current;
 
@@ -85,17 +85,17 @@ const IMU3DVisualization = () => {
     return { accX, accY, accZ, gyroX, gyroY, gyroZ };
   };
 
-  // 初始化Three.js场景
+  // 初始化Three.js場景
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    // 创建场景
+    // 創建場景
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf1f5f9); // Slate-100 for Light Nordic
     // scene.fog = new THREE.Fog(0xf1f5f9, 10, 50); // Optional fog
     sceneRef.current = scene;
 
-    // 创建相机
+    // 創建相機
     const camera = new THREE.PerspectiveCamera(
       75,
       canvasRef.current.clientWidth / canvasRef.current.clientHeight,
@@ -106,7 +106,7 @@ const IMU3DVisualization = () => {
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
-    // 创建渲染器
+    // 創建渲染器
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
       antialias: true,
@@ -123,7 +123,7 @@ const IMU3DVisualization = () => {
     directionalLight.castShadow = true;
     scene.add(directionalLight);
 
-    // 添加坐标轴
+    // 添加坐標軸
     const axesHelper = new THREE.AxesHelper(8);
     scene.add(axesHelper);
     objectsRef.current.axesHelper = axesHelper;
@@ -140,7 +140,7 @@ const IMU3DVisualization = () => {
     scene.add(cube);
     objectsRef.current.cube = cube;
 
-    // 添加主立方體边缘
+    // 添加主立方體邊緣
     const edges = new THREE.EdgesGeometry(cubeGeometry);
     const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
     const wireframe = new THREE.LineSegments(edges, lineMaterial);
@@ -164,7 +164,7 @@ const IMU3DVisualization = () => {
     const fastWireframe = new THREE.LineSegments(fastEdges, lineMaterial.clone());
     fastCube.add(fastWireframe);
 
-    // 创建加速度箭头（红色）
+    // 創建加速度箭頭（紅色）
     const accArrow = new THREE.ArrowHelper(
       new THREE.Vector3(1, 0, 0),
       new THREE.Vector3(0, 0, 0),
@@ -176,7 +176,7 @@ const IMU3DVisualization = () => {
     scene.add(accArrow);
     objectsRef.current.accArrow = accArrow;
 
-    // 创建陀螺仪箭头（紫色）
+    // 創建陀螺儀箭頭（紫色）
     const gyroArrow = new THREE.ArrowHelper(
       new THREE.Vector3(0, 1, 0),
       new THREE.Vector3(0, 0, 0),
@@ -188,7 +188,7 @@ const IMU3DVisualization = () => {
     scene.add(gyroArrow);
     objectsRef.current.gyroArrow = gyroArrow;
 
-    // 创建轨迹线
+    // 創建軌跡線
     const trajectoryGeometry = new THREE.BufferGeometry();
     const trajectoryMaterial = new THREE.LineBasicMaterial({
       color: 0x059669, // Emerald-600
@@ -198,19 +198,19 @@ const IMU3DVisualization = () => {
     scene.add(trajectoryLine);
     objectsRef.current.trajectoryLine = trajectoryLine;
 
-    // 添加网格地面
+    // 添加網格地面
     const gridHelper = new THREE.GridHelper(60, 60, 0xcbd5e1, 0xe2e8f0);
     gridHelper.position.y = -5;
     scene.add(gridHelper);
 
-    // 动画循环
+    // 動畫循環
     const animate = () => {
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
     };
     animate();
 
-    // 窗口大小调整
+    // 窗口大小調整
     const handleResize = () => {
       if (!canvasRef.current) return;
       const width = canvasRef.current.clientWidth;
@@ -227,17 +227,17 @@ const IMU3DVisualization = () => {
     };
   }, []);
 
-  // 更新3D可视化
+  // 更新3D可視化
   const update3DVisualization = (data) => {
     if (!objectsRef.current.cube) return;
 
     const { accX, accY, accZ, gyroX, gyroY, gyroZ } = data;
 
-    // 更新加速度箭头
+    // 更新加速度箭頭
     const accVector = new THREE.Vector3(accX, accZ - 9.8, accY).normalize();
     const accLength = Math.min(Math.sqrt(accX ** 2 + accY ** 2 + (accZ - 9.8) ** 2), 10);
 
-    // 更新陀螺仪箭头
+    // 更新陀螺儀箭頭
     const gyroVector = new THREE.Vector3(gyroX, gyroZ, gyroY).normalize();
 
     // -- 更新主立方體 (繞圓) --
@@ -292,7 +292,7 @@ const IMU3DVisualization = () => {
     objectsRef.current.trajectoryLine.geometry.attributes.position.needsUpdate = true;
   };
 
-  // 数据更新循环
+  // 數據更新循環
   useEffect(() => {
     if (isRunning) {
       intervalRef.current = setInterval(() => {
@@ -379,8 +379,8 @@ const IMU3DVisualization = () => {
             <button
               onClick={() => setIsRunning(!isRunning)}
               className={`px-8 py-3 rounded-xl font-bold text-white transition-all shadow-md active:scale-95 flex items-center gap-2 ${isRunning
-                  ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-200'
-                  : 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200'
+                ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-200'
+                : 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200'
                 }`}
             >
               <span>{isRunning ? '⏸' : '▶'}</span>

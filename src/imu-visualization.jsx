@@ -8,17 +8,17 @@ const IMUVisualization = () => {
   const timeRef = useRef(0);
   const intervalRef = useRef(null);
 
-  // 模拟 IMU 数据生成
+  // 模擬 IMU 數據生成
   const generateIMUData = () => {
     const time = timeRef.current;
-    
+
     return {
       time: time.toFixed(2),
-      // 加速度计数据 (g)
+      // 加速度計數據 (g)
       accX: Math.sin(time * 0.5) * 2 + (Math.random() - 0.5) * 0.3,
       accY: Math.cos(time * 0.3) * 1.5 + (Math.random() - 0.5) * 0.3,
       accZ: 9.8 + Math.sin(time * 0.2) * 0.5 + (Math.random() - 0.5) * 0.2,
-      // 陀螺仪数据 (deg/s)
+      // 陀螺儀數據 (deg/s)
       gyroX: Math.sin(time * 0.7) * 50 + (Math.random() - 0.5) * 10,
       gyroY: Math.cos(time * 0.4) * 40 + (Math.random() - 0.5) * 10,
       gyroZ: Math.sin(time * 0.6) * 30 + (Math.random() - 0.5) * 10,
@@ -63,7 +63,7 @@ const IMUVisualization = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20">
-          {/* 标题 */}
+          {/* 標題 */}
           <div className="mb-6">
             <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
               <span className="text-5xl">📊</span>
@@ -76,15 +76,14 @@ const IMUVisualization = () => {
           <div className="flex flex-wrap gap-4 mb-6 p-4 bg-white/5 rounded-xl border border-white/10">
             <button
               onClick={handleToggle}
-              className={`px-6 py-3 rounded-lg font-semibold text-white transition-all shadow-lg ${
-                isRunning 
-                  ? 'bg-red-500 hover:bg-red-600' 
+              className={`px-6 py-3 rounded-lg font-semibold text-white transition-all shadow-lg ${isRunning
+                  ? 'bg-red-500 hover:bg-red-600'
                   : 'bg-green-500 hover:bg-green-600'
-              }`}
+                }`}
             >
               {isRunning ? '⏸ 暫停' : '▶ 開始'}
             </button>
-            
+
             <button
               onClick={handleReset}
               className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-all shadow-lg"
@@ -107,7 +106,7 @@ const IMUVisualization = () => {
             </div>
           </div>
 
-          {/* 当前数值显示 */}
+          {/* 當前數值顯示 */}
           {data.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               {[
@@ -128,7 +127,7 @@ const IMUVisualization = () => {
             </div>
           )}
 
-          {/* 加速度计图表 */}
+          {/* 加速度計圖表 */}
           <div className="mb-6 bg-white/5 rounded-xl p-4 border border-white/10">
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <span>📈</span> 加速度計 (Accelerometer)
@@ -136,18 +135,18 @@ const IMUVisualization = () => {
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
-                <XAxis 
-                  dataKey="time" 
+                <XAxis
+                  dataKey="time"
                   stroke="#ffffff80"
                   label={{ value: '時間 (s)', position: 'insideBottom', offset: -5, fill: '#fff' }}
                 />
-                <YAxis 
+                <YAxis
                   stroke="#ffffff80"
                   label={{ value: '加速度 (g)', angle: -90, position: 'insideLeft', fill: '#fff' }}
                 />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(0,0,0,0.8)', 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(0,0,0,0.8)',
                     border: '1px solid #ffffff30',
                     borderRadius: '8px'
                   }}
@@ -160,7 +159,7 @@ const IMUVisualization = () => {
             </ResponsiveContainer>
           </div>
 
-          {/* 陀螺仪图表 */}
+          {/* 陀螺儀圖表 */}
           <div className="bg-white/5 rounded-xl p-4 border border-white/10">
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <span>🔄</span> 陀螺儀 (Gyroscope)
@@ -168,18 +167,18 @@ const IMUVisualization = () => {
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
-                <XAxis 
-                  dataKey="time" 
+                <XAxis
+                  dataKey="time"
                   stroke="#ffffff80"
                   label={{ value: '時間 (s)', position: 'insideBottom', offset: -5, fill: '#fff' }}
                 />
-                <YAxis 
+                <YAxis
                   stroke="#ffffff80"
                   label={{ value: '角速度 (°/s)', angle: -90, position: 'insideLeft', fill: '#fff' }}
                 />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(0,0,0,0.8)', 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(0,0,0,0.8)',
                     border: '1px solid #ffffff30',
                     borderRadius: '8px'
                   }}
@@ -192,7 +191,7 @@ const IMUVisualization = () => {
             </ResponsiveContainer>
           </div>
 
-          {/* 说明 */}
+          {/* 說明 */}
           <div className="mt-6 p-4 bg-blue-500/20 rounded-lg border border-blue-400/30">
             <p className="text-blue-100 text-sm">
               <strong>說明：</strong>此工具模擬顯示 IMU 六軸傳感器數據。加速度計測量線性加速度（單位：g），
